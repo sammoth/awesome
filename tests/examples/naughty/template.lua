@@ -38,7 +38,6 @@ for _, d in ipairs(drawin.get()) do
     end
 end
 
--- Get rid of invalid drawins. The shims are very permissive and wont deny this.
 if rect.x1 == rect.x2 or rect.y1 == rect.y2 then return end
 
 local multi = wibox.layout {
