@@ -7,6 +7,8 @@ local color     = require( "gears.color"    )
 local shape     = require( "gears.shape"    )
 local beautiful = require( "beautiful"      )
 local wibox     = require( "wibox"          )
+local titlebar  = require( "awful.titlebar" )
+local hierarchy = require( "wibox.hierarchy")
 
 -- Run the test
 local args = loadfile(file_path)() or {}
@@ -155,6 +157,8 @@ local function client_widget(c, col, label)
         widget        = wibox.container.background,
     }
 end
+
+local function no_op() end
 
 -- Add all wiboxes
 
