@@ -30,7 +30,12 @@
 typedef struct screen_output_t screen_output_t;
 ARRAY_TYPE(screen_output_t, screen_output)
 
-struct a_screen
+/**
+ * A virtual screen as used by literally everything.
+ *
+ * Note that this structure doesn't always maps to physical screens.
+ */
+struct a_screen //TODO rename a_virtual_screen
 {
     LUA_OBJECT_HEADER
     /** Is this screen still valid and may be used? */
@@ -45,6 +50,31 @@ struct a_screen
     uint32_t xid;
 };
 ARRAY_FUNCS(screen_t *, screen, DO_NOTHING)
+
+/**
+ * This structure tracks the area where there is physical screens.
+ *
+ * It is used to manage virtual screens. For example, removing all screens
+ * during suspend or moving a screen when switching to an external monitor
+ * when docked should have no effect on the tags and client layout. Without
+ * this abstraction, the screen gets destroyed and recreated and this state is
+ * lost.
+ */
+struct a_screen_area
+{
+    LUA_OBJECT_HEADER
+    /** Is this screen still valid and may be used? */
+    bool valid;
+    /** Screen geometry */
+    area_t geometry;
+    /** Screen workarea */
+    area_t workarea;
+    /** The screen outputs informations */
+    screen_output_array_t outputs;
+    /** Some XID identifying this screen */
+    uint32_t xid;
+};
+ARRAY_FUNCS(screen_area_t *, screen_area, DO_NOTHING)
 
 void screen_class_setup(lua_State *L);
 void screen_scan(void);

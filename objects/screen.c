@@ -292,6 +292,19 @@ screen_deduplicate(lua_State *L, screen_array_t *screens)
     }
 }
 
+/* Give Lua a chance to handle or blacklist an output area before creating the
+ * screen object.
+ */
+static void
+monitor_add_notify(lua_State *L, xcb_randr_monitor_info_iterator_t *iter)
+{
+    lua_pushinteger(L, iter->data->x);
+    lua_pushinteger(L, iter->data->y);
+    lua_pushinteger(L, iter->data->width);
+    lua_pushinteger(L, iter->data->height);
+    luaA_class_emit_signal(L, &client_class, "monitor_added", 4);
+}
+
 static screen_t *
 screen_add(lua_State *L, screen_array_t *screens)
 {
@@ -327,6 +340,9 @@ screen_scan_randr_monitors(lua_State *L, screen_array_t *screens)
 
         if(!xcb_randr_monitor_info_outputs_length(monitor_iter.data))
             continue;
+
+        monitor_add_notify(L, &monitor_iter);
+        printf("\n\nSCR! %d %d %d %d\n", monitor_iter.data->x, monitor_iter.data->y, monitor_iter.data->width, monitor_iter.data->height);
 
         new_screen = screen_add(L, screens);
         new_screen->geometry.x = monitor_iter.data->x;

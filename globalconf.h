@@ -55,6 +55,7 @@
     }
 
 typedef struct drawable_t drawable_t;
+typedef struct a_screen_area screen_area_t;
 typedef struct drawin_t drawin_t;
 typedef struct a_screen screen_t;
 typedef struct button_t button_t;
@@ -70,6 +71,7 @@ typedef struct sequence_pair sequence_pair_t;
 ARRAY_TYPE(button_t *, button)
 ARRAY_TYPE(tag_t *, tag)
 ARRAY_TYPE(screen_t *, screen)
+ARRAY_TYPE(screen_area_t *, screen_area)
 ARRAY_TYPE(client_t *, client)
 ARRAY_TYPE(drawin_t *, drawin)
 ARRAY_TYPE(xproperty_t, xproperty)
