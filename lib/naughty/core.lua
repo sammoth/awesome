@@ -122,6 +122,10 @@ gtable.crush(naughty, require("naughty.constants"))
 -- @property active
 -- @param table
 
+--- True when there is an handler connected to request::display.
+-- @property has_display_handler
+-- @param boolean
+
 local properties = {
     suspended         = false,
     expiration_paused = false
@@ -338,6 +342,10 @@ end
 -- Use an explicit getter to make it read only.
 function naughty.get_active()
     return naughty._active
+end
+
+function naughty.get_has_display_handler()
+    return conns["request::display"] and #conns["request::display"] > 0 or false
 end
 
 --- Set new notification timeout.
