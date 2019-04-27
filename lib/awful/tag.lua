@@ -705,11 +705,11 @@ end
 --
 -- Here is the property effect on the tiled layouts:
 --
---@DOC_awful_layout_dynamic_suit_tile_mwfact_EXAMPLE@
+--@DOC_dynamite_suit_tile_mwfact_EXAMPLE@
 --
 -- Here is the property effect on the magnifier layout:
 --
---@DOC_awful_layout_dynamic_suit_magnifier_mwfact_EXAMPLE@
+--@DOC_dynamite_suit_magnifier_mwfact_EXAMPLE@
 --
 -- **Signal:**
 --
@@ -1000,7 +1000,7 @@ end
 -- Note that pixels cannot be divided, the gap will be rounded to the closest
 -- multiplier of 2.
 --
--- @DOC_awful_layout_dynamic_suit_tile_gap_EXAMPLE@
+-- @DOC_dynamite_suit_tile_gap_EXAMPLE@
 --
 -- **Signal:**
 --
@@ -1191,7 +1191,7 @@ end
 --
 -- Here is the property effect on the tiled layouts:
 --
---@DOC_awful_layout_dynamic_suit_tile_nmaster_EXAMPLE@
+--@DOC_dynamite_suit_tile_nmaster_EXAMPLE@
 --
 -- **Signal:**
 --
@@ -1309,7 +1309,7 @@ end
 --
 -- Here is the property effect on the tiled layouts:
 --
---@DOC_awful_layout_dynamic_suit_tile_ncol_EXAMPLE@
+--@DOC_dynamite_suit_tile_ncol_EXAMPLE@
 --
 -- **Signal:**
 --
