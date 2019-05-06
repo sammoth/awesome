@@ -231,6 +231,7 @@ local util   = require("awful.util")
 local gtable = require("gears.table")
 local gtimer = require("gears.timer")
 local string = require("gears.string")
+local gobject = require("gears.object")
 local aclient = require("awful.client")
 local protected_call = require("gears.protected_call")
 
@@ -750,6 +751,8 @@ capi.client.connect_signal ("manage"          , spawn.on_snid_callback )
 
 -- The format is hexadecimal strings delimited by `;`.
 capi.awesome.register_xproperty("_spawn_cache", "string")
+
+gobject._setup_class_signals(spawn)
 
 return setmetatable(spawn, { __call = function(_, ...) return spawn.spawn(...) end })
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
