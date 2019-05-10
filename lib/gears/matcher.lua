@@ -100,10 +100,19 @@ end
 --
 -- @param o The object.
 -- @tparam[opt=nil] table rules The rules to check. List with "rule", "rule_any",
---  "except" and "except_any" keys.
+--  "except" and "except_any" keys. If no rules are provided, the default set
+--  will be used.
 -- @treturn table The list of matched rules.
 function matcher:matching_rules(o, rules)
+    rules = rules or select(2, next(self._matching_rules))
+
     local result = {}
+
+    if not rules then
+        gdebug.print_warning("This matcher has no rule source")
+        return result
+    end
+
     for _, entry in ipairs(rules) do
         if self:matches_rule(o, entry) then
             table.insert(result, entry)
@@ -288,6 +297,39 @@ function matcher:_execute(o, props, callbacks)
     end
 end
 
+--- Add a new rule to the default set.
+-- @param string The source name.
+-- @param table rule A valid rule.
+function matcher:append_rule(source, rule)
+    if not self._matching_rules[source] then
+        self:add_matching_rules(source, {}, {}, {})
+    end
+    table.insert(self._matching_rules[source], rule)
+end
+
+--- Add a new rules to the default set.
+-- @param string The source name.
+-- @param table rule A table with rules.
+function matcher:append_rules(source, rules)
+    for _, r in ipairs(rules) do
+        self:append_rule(source, rule)
+    end
+end
+
+--- Remove a new rule to the default set.
+-- @param string The source name.
+-- @param table rule A valid rule.
+function matcher:remove_rule(source, rule)
+    if not not self._matching_rules[source] then return end
+
+    for k, v in ipairs(self._matching_rules[source]) do
+        if v == rule then
+            table.remove(self._matching_rules[source], k)
+            return
+        end
+    end
+end
+
 local module = {}
 
 --- Create a new rule solver object.
@@ -295,7 +337,7 @@ local module = {}
 -- @return A new rule solver object.
 
 local function new()
-    local ret = {}
+    local ret = {_private = {rules = {}}}
 
     -- Contains the sources.
     -- The elements are ordered "first in, first executed". Thus, the higher the
