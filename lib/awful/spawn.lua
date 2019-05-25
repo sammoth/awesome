@@ -552,14 +552,14 @@ local function is_running(hash, matcher)
 
     if #status.instances == 0 then return false end
 
-    for _, c in ipairs(status.instances) do
-        if c.valid then return true end
-    end
-
     if matcher then
         for _, c in ipairs(client.get()) do
             if matcher(c) then return true end
         end
+    end
+
+    for _, c in ipairs(status.instances) do
+        if c.valid then return true end
     end
 
     return false
