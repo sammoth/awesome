@@ -58,14 +58,14 @@ local function update_ratio(handler, c, widget, hints) --luacheck: no unused arg
     -- Apply the size hints
     if c.apply_size_hints then
         local w, h = c:apply_size_hints(
-            hints.width  - 2*hints.gap - 2*c.border_width,
-            hints.height - 2*hints.gap - 2*c.border_width
+            math.max(1, hints.width  - 2*hints.gap - 2*c.border_width),
+            math.max(1, hints.height - 2*hints.gap - 2*c.border_width)
         )
         hints = {
             x      = hints.x,
             y      = hints.y,
-            width  = w + 2*hints.gap + 2*c.border_width,
-            height = h + 2*hints.gap + 2*c.border_width,
+            width  = math.max(1, w + 2*hints.gap + 2*c.border_width),
+            height = math.max(1, h + 2*hints.gap + 2*c.border_width),
         }
     end
 

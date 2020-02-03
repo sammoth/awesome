@@ -27,6 +27,8 @@ local default_buttons = util.table.join(
 )
 
 local function label(c)
+    if not c.valid then return "invalid" end
+
     local shape = beautiful.tabbar_client_shape
     local shape_border_width = beautiful.tabbar_client_shape_border_width
     local shape_border_color = beautiful.tabbar_client_shape_border_color
@@ -45,6 +47,18 @@ local function label(c)
     return c.name, bg, nil, c.icon, other_args
 end
 
+local function update_focus(self)
+    if not self._wibox then return end
+
+    common.list_update(
+        self._wibox.widget,
+        default_buttons,
+        label,
+        self._data,
+        self._current_list or {}
+    )
+end
+
 local function regen_client_list(self)
     local all_widgets = self:get_all_children()
     local ret = {}
@@ -55,14 +69,8 @@ local function regen_client_list(self)
         end
     end
 
-    common.list_update(
-        self._wibox.widget,
-        default_buttons,
-        label,
-        self._data,
-        ret
-    )
-
+    self._current_list = ret
+    update_focus(self)
 end
 
 --- Create a rudimentary tabbar widget
@@ -184,20 +192,28 @@ local function ctr(_, _)
 
     -- When something change, recompute the client list.
     for _, s2 in ipairs {
+        "property::title",
         "widget::swapped_forward",
         "widget::inserted_forward",
         "widget::replaced_forward",
         "widget::removed_forward",
         "widget::added_forward",
         "widget::reseted_forward",
+        "swapped", "will_remove",
+        "added",
     } do
         m:connect_signal(s2, regen_client_list)
     end
+
+    m:connect_signal("focused"  , function() update_focus(m) end)
+    m:connect_signal("unfocused", function() update_focus(m) end)
 
     -- Prevent further changes
     m.set_widget = nil
     rawset(m, "set_children", function(_, ...) return s:set_children(...) end)
     rawset(m, "get_children", function(_) return s:get_children() end)
+
+    m:connect_signal("raised", function(placeholder, c) raise(m, c) end)
 
     return m
 end
